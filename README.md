@@ -11,6 +11,24 @@ Create a personal armory for your guild.
 
 These instructions will get you started - and get the project up and running.
 
+If you don't have node, bower, npm og gulp - first install node.js on your computer.
+
+### Installing needed dependencies
+
+```
+npm install npm -g
+```
+
+then 
+
+```
+npm install -g bower
+```
+finally
+
+```
+npm install --global gulp-cli
+```
 ### Installing
 
 Register for an API key @ [https://dev.battle.net/member/register](https://dev.battle.net/member/register)
