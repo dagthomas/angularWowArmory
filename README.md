@@ -5,9 +5,7 @@ Create a personal armory for your guild.
 
 ## Demo
 
-[I'm an inline-style link](https://wow.theaxe.men)
-
-There is a hidden feature of guild news if you slide to the right (click, drag to right).
+[DEMO of project](https://wow.theaxe.men)
 
 ## Getting Started
 
@@ -27,6 +25,7 @@ Then install the npm dependencies
 npm install
 ```
 
+Remember to edit the settings.js file before running gulp.
 Then run gulp to create the dist folder (you can upload these to your server).
 
 ```
@@ -56,6 +55,8 @@ Run gulp to deploy the project
 ```
 gulp
 ```
+
+It will create a /dist/ folder with the uploadable content.
 
 ## Built With
 
