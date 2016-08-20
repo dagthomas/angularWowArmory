@@ -32,6 +32,7 @@ npm install --global gulp-cli
 ### Installing
 
 Register for an API key @ [https://dev.battle.net/member/register](https://dev.battle.net/member/register)
+Copy your API key into the apikey variable, in settings.js.
 
 Use bower to get the required libraries.
 
@@ -46,9 +47,6 @@ npm install
 ```
 
 Remember to edit the settings.js file before running gulp.
-
-Copy your API key into the apikey variable, in settings.js.
-
 Then run gulp to create the dist folder (you can upload these to your server).
 
 ```
