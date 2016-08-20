@@ -9,12 +9,10 @@ String.prototype.hashCode = function () {
     for (i = 0, len = this.length; i < len; i++) {
         chr = this.charCodeAt(i);
         hash = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
+        hash |= 0; 
     }
     return hash;
 };
-// $stateParams.char
-
 
 var axeApp = angular.module("axeApp", ["ngSanitize", "ngStorage", "ngBattleNet", "ui.router", "angular.filter", "ngMaterial", "md.data.table", "getData", "ngSanitize", "angular-loading-bar"]);
 
