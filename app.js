@@ -9,7 +9,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
         rewriteLinks: false
     });
     // You can comment this out for debug
-    //$compileProvider.debugInfoEnabled(false);
+    $compileProvider.debugInfoEnabled(false);
     // For umatchet url, henvis til guildsidene.
     $urlRouterProvider.otherwise("/guild");
     // Setter opp forskjellige states for behandling av URLer
