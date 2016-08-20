@@ -149,7 +149,7 @@
             <h2 ng-bind-html="history_string"></h2>
             <div ng-repeat="loot in char.feed | limitTo: 20" ng-if="loot.type != 'CRITERIA'">
                 <a class="qual{{loot.quality}}" target="_blank" ng-href="http://www.wowhead.com/item={{loot.itemId}}" rel="bonus={{getBonus(loot.bonusLists | flatten)}} pcs={{getBonus(loot.tooltipParams.set | flatten)}}  ench={{loot.tooltipParams.enchant}} gems={{loot.tooltipParams.gem0}}:{{loot.tooltipParams.gem1}} upgd={{value.tooltipParams.upgrade.current}}"
-                    ng-if="loot.type == 'LOOT'" ng-bind-html="loot.timestamp | date:'dd-MM-yyyy HH:mm:ss'"></a>
+                    ng-if="loot.type == 'LOOT'">{{loot.timestamp | date:'dd-MM-yyyy HH:mm:ss'}}</a>
                 <a target="_blank" ng-href="http://www.wowhead.com/achievement={{loot.achievement.id}}" ng-if="loot.type == 'BOSSKILL' || loot.type == 'ACHIEVEMENT'"
                     ng-bind-html="loot.achievement.title"></a>
                 <!--<h4><a ng-href="http//www.wowhead.com/achievement={{loot.achievement.id}}" rel="criteria={{loot.criteria.id}}" ng-if="loot.type == 'ACHIEVEMENT' || loot.type == 'CRITERIA'">{{loot.achievement.title}}</a></h4>   -->
