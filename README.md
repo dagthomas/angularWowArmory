@@ -11,7 +11,7 @@ Create a personal armory for your guild.
 
 These instructions will get you started - and get the project up and running.
 
-If you don't have node, bower, npm og gulp - first install node.js on your computer.
+If you don't have node, bower, npm or gulp - first install node.js on your computer.
 
 ### Installing needed dependencies
 
