@@ -47,7 +47,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         }, 500);
                         $timeout(function () {
                             $scope.loadItems = true;
-                        }, 750);
+                        }, 1250);
                     });
                 }
 
@@ -79,7 +79,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         }, 500);
                         $timeout(function () {
                             $scope.loadItems = true;
-                        }, 750);
+                        }, 1250);
                     }
                 });
             }]
@@ -131,7 +131,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         }, 500);
                         $timeout(function () {
                             $scope.loadItems = true;
-                        }, 750);
+                        }, 1250);
                     });
                 }
 
@@ -163,7 +163,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         }, 500);
                         $timeout(function () {
                             $scope.loadItems = true;
-                        }, 750);
+                        }, 1250);
                     }
                 });
 
