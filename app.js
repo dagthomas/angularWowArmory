@@ -331,6 +331,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
 
     $scope.page2_string = page2_string;
     $scope.page3_string = page3_string;
+    $scope.minlevel = minlevel;
 
     $scope.newstitle_string = newstitle_string;
 

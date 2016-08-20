@@ -5,7 +5,7 @@
                 <div ng-repeat="uni in unit | filter:sok | groupBy:'rank'">
 
                     <div ng-repeat="g in uni | filter:{ character: {class: filter.class.id } } : true | filter:{ rank: filter.rank.id } : true  | orderBy: 'character.name'"
-                        class="fade">
+                        class="fade" ng-if="g.character.level >= minlevel">
                         <h4 ng-if="$first" ng-bind-html="getRank(g.rank)"></h4>
                         <h3 class=" pointer">
                             <a ui-sref="char({ char: g.character.name })" class="class{{g.character.class}} guildliste" ng-bind-html="g.character.name"></a>
