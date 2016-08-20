@@ -171,7 +171,7 @@ $stateProvider
         url: "/feed/:char",
         templateUrl: "partials/feed.html",
         controller: ['battleNetApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', function (battleNetApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData) {
-            battleNetApi.wow.character.feed({ name: $stateParams.char, realm: serverName }).then(function (response) {
+            battleNetApi.wow.character.feed({ name: $stateParams.char, realm: $scope.serverName }).then(function (response) {
                 $scope.feed = angular.fromJson(response.data);
 
             });
@@ -230,6 +230,8 @@ $scope.region = region;
 $scope.menu_string = menu_string;
 $scope.ranks = ranks;
 $scope.raidReady = raidReady;
+$scope.guildName = guildName;
+$scope.serverName = serverName;
 
 $scope.classes = [{ "class": "Warrior", id: 1 }, { "class": "Paladin", id: 2 }, { "class": "Hunter", id: 3 }, { "class": "Rogue", id: 4 }, { "class": "Priest", id: 5 }, { "class": "Death Knight", id: 6 }, { "class": "Shaman", id: 7 }, { "class": "Mage", id: 8 }, { "class": "Warlock", id: 9 }, { "class": "Monk", id: 10 }, { "class": "Druid", id: 11 }, { "class": "Demon Hunter", id: 12 }];
 
@@ -330,7 +332,7 @@ GetData.getGuild().then(
 
 $rootScope.updateData = function (inputString) {
     if (inputString == 'gnews') {
-        battleNetApi.wow.guild.news({ name: guildName, realm: serverName }).then(function (response) {
+        battleNetApi.wow.guild.news({ name: $scope.guildName, realm: $scope.serverName }).then(function (response) {
             $scope.char = angular.fromJson(response.data);
             $scope.$storage[inputString] = angular.fromJson(response.data);
             $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
@@ -345,7 +347,7 @@ $rootScope.updateData = function (inputString) {
         });
 
     } else if (inputString == 'guild') {
-        battleNetApi.wow.guild.profile({ name: guildName, realm: serverName, fields: ['members', 'profile'] }).then(function (response) {
+        battleNetApi.wow.guild.profile({ name: $scope.guildName, realm: $scope.serverName, fields: ['members', 'profile'] }).then(function (response) {
             $scope.char = angular.fromJson(response.data);
             $scope.$storage[inputString] = angular.fromJson(response.data);
             $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
@@ -359,7 +361,7 @@ $rootScope.updateData = function (inputString) {
             }
         });
     } else {
-        battleNetApi.wow.character.profile({ name: inputString, realm: serverName, fields: ['items', 'feed', 'titles', 'stats', 'talents'] }).then(function (response) {
+        battleNetApi.wow.character.profile({ name: inputString, realm: $scope.serverName, fields: ['items', 'feed', 'titles', 'stats', 'talents'] }).then(function (response) {
             $scope.char = angular.fromJson(response.data);
             $scope.$storage[inputString] = angular.fromJson(response.data);
             $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
