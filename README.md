@@ -13,6 +13,8 @@ These instructions will get you started - and get the project up and running.
 
 ### Installing
 
+Register for an API key @ [https://dev.battle.net/member/register](https://dev.battle.net/member/register)
+
 Use bower to get the required libraries.
 
 ```
@@ -26,6 +28,9 @@ npm install
 ```
 
 Remember to edit the settings.js file before running gulp.
+
+Copy your API key into the apikey variable, in settings.js.
+
 Then run gulp to create the dist folder (you can upload these to your server).
 
 ```
