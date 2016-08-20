@@ -9,7 +9,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
         rewriteLinks: false
     });
     // You can comment this out for debug
-    $compileProvider.debugInfoEnabled(false);
+    //$compileProvider.debugInfoEnabled(false);
     // For umatchet url, henvis til guildsidene.
     $urlRouterProvider.otherwise("/guild");
     // Setter opp forskjellige states for behandling av URLer
@@ -81,6 +81,15 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                             $scope.loadItems = true;
                         }, 1250);
                     }
+                    $timeout(function () {
+                        $scope.loaderIcon = false;
+                    }, 250);
+                    $timeout(function () {
+                        $WowheadPower.refreshLinks();
+                    }, 500);
+                    $timeout(function () {
+                        $scope.loadItems = true;
+                    }, 1250);
                 });
             }]
         })
@@ -115,6 +124,9 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     }).finally(function () {
                         if ($scope.$storage['gnews'].code != '504') {
                             dataJson.saveData($scope.$storage['gnews'], "gnews.json");
+                        }
+                        if (!$scope.gnews) {
+                            location.reload();
                         }
                         if ($scope.$storage['gnews'] == '504') {
                             location.reload();
@@ -154,17 +166,18 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     } else if (timeSince($scope.$storage['gnews']['time']) >= 3600) {
                         updateData()
                     } else {
-                        // Refresh wowhead links
-                        $timeout(function () {
-                            $scope.loaderIcon = false;
-                        }, 250);
-                        $timeout(function () {
-                            $WowheadPower.refreshLinks();
-                        }, 500);
-                        $timeout(function () {
-                            $scope.loadItems = true;
-                        }, 1250);
+
                     }
+                    // Refresh wowhead links
+                    $timeout(function () {
+                        $scope.loaderIcon = false;
+                    }, 250);
+                    $timeout(function () {
+                        $WowheadPower.refreshLinks();
+                    }, 500);
+                    $timeout(function () {
+                        $scope.loadItems = true;
+                    }, 1250);
                 });
 
             }
