@@ -1,16 +1,13 @@
-<section layout="row" layout-gt-md="row" layout-align="center center" layout-wrap class="newsTypeButtons">
-    <md-button ng-repeat="t in raidTypes" class="md-raised" ui-sref="guildnews_type({ type: t.type })" ng-bind-html="t.name"></md-button>
-</section>
-
-
 <md-content class="fade" ng-show="gnews">
     <div class="pageTitle">
         <div layout="row" layout-align="center center">
             <div layout-padding>
-                <h1 class="class{{char.class}} nospacing fade mid charName" ng-bind-html="newstitle_string"></h1>
+                <h1 class="nospacing fade mid charName" ng-bind-html="newstitle_string"></h1>
+                <section layout="row" layout-gt-md="row" layout-align="center center" layout-wrap class="newsTypeButtons">
+                    <md-button ng-repeat="t in raidTypes" class="md-raised" ui-sref="guildnews_type({ type: t.type })" ng-bind-html="t.name"></md-button>
+                </section>
             </div>
             <div>
-                <!--  <ng-include ng-if="char.items.averageItemLevelEquipped > (raidReady - 1)" src="'partials/skull.html'"></ng-include>-->
             </div>
         </div>
     </div>
@@ -33,7 +30,6 @@
                     </h4>
                 </div>
             </div>
-
         </div>
     </md-content>
 </div>
