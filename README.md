@@ -5,7 +5,7 @@ Create a personal armory for your guild.
 
 ## Demo
 
-[DEMO of project](https://wow.theaxe.men)
+[DEMO of project](http://wow.theaxe.men)
 
 ## Getting Started
 
