@@ -1,0 +1,39 @@
+<section layout="row" layout-gt-md="row" layout-align="center center" layout-wrap class="newsTypeButtons">
+    <md-button ng-repeat="t in raidTypes" class="md-raised" ui-sref="guildnews_type({ type: t.type })" ng-bind-html="t.name"></md-button>
+</section>
+
+
+<md-content class="fade" ng-show="gnews">
+    <div class="pageTitle">
+        <div layout="row" layout-align="center center">
+            <div layout-padding>
+                <h1 class="class{{char.class}} nospacing fade mid charName" ng-bind-html="newstitle_string"></h1>
+            </div>
+            <div>
+                <!--  <ng-include ng-if="char.items.averageItemLevelEquipped > (raidReady - 1)" src="'partials/skull.html'"></ng-include>-->
+            </div>
+        </div>
+    </div>
+</md-content>
+<div layout-gt-md="row" layout-align="center start">
+    <md-content class="page-container" ng-repeat="loot in gnews.news | filter: {context: newsType } : true   | groupBy:'type' "
+        ng-show="gnews.news[0]">
+        <div class="page fade" ng-show="loadItems">
+            <div ng-repeat="l in loot | limitTo:25" ng-show="loadItems" class="fade">
+                <h2 ng-if="$first" class="newsItem" ng-bind-html="looted_string"></h2>
+                <div class="md-list-item-text">
+                    <a ui-sref="char({ char: l.character })" class="class{{l.character.class}} guildliste">
+                        <h3 class="charname" ng-bind-html="l.character + ', ' + (l.timestamp | date:'dd.MM HH:mm')"></h3>
+                    </a>
+                    <h4 ng-if="l.type != 'playerAchievement'">
+                        <a target="_blank" ng-href="http://www.wowhead.com/item={{l.itemId}}" rel="bonus={{getBonus(l.bonusLists | flatten)}}"></a>
+                    </h4>
+                    <h4 ng-if="l.type == 'playerAchievement'">
+                        <a target="_blank" ng-href="http://www.wowhead.com/achievement={{l.achievement.id}}"></a>
+                    </h4>
+                </div>
+            </div>
+
+        </div>
+    </md-content>
+</div>
