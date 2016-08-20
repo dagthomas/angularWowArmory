@@ -183,12 +183,97 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
             }
             ]
         })
+        .state('guildnews_type', {
+            url: "/guildnews/:type",
+            templateUrl: "partials/gnews_type.html",
+            controller: ['battleNetApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', '$rootScope', '$state', function (battleNetApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData, $rootScope, $state) {
+                $rootScope.page = 3;
+                $scope.newsType = $stateParams.type;
+                $scope.raidTypes = [{ "type": "dungeon-normal", "name": "Normal Dungeon" }, { "type": "dungeon-heroic", "name": "Heroic Dungeon" }, { "type": "dungeon-mythic", "name": "Mythic Dungeon" }, { "type": "raid-normal", "name": "Normal Raid" }, { "type": "raid-heroic", "name": "Heroic Raid" }, { "type": "raid-mythic", "name": "Mythic Raid" }];
+                $scope.changeNews = function (input) {
+                    $state.go('guildnews_type', { type: input });
+                }
+                function timeSince(date) {
+                    var returndate = (new Date().getTime() / 1000).toString().split('.').shift() - date.toString().split('.').shift();
+                    return returndate;
+                }
+                $scope.loadItems = false;
+                $scope.loaderIcon = true;
+                function updateData() {
+                    battleNetApi.wow.guild.news({ name: guildName, realm: serverName }).then(function (response) {
+                        $scope.gnews = angular.fromJson(response.data);
+                        $scope.$storage['gnews'] = angular.fromJson(response.data);
+                        $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
+                    }).finally(function () {
+                        if ($scope.$storage['gnews'].code != '504') {
+                            dataJson.saveData($scope.$storage['gnews'], "gnews.json");
+                        }
+                        if (!$scope.gnews) {
+                            location.reload();
+                        }
+                        if ($scope.$storage['gnews'] == '504') {
+                            location.reload();
+                        }
+                        if ($scope.char.code == '504') {
+                            location.reload();
+                        }
+                        // Refresh wowhead links
+                        $timeout(function () {
+                            $scope.loaderIcon = false;
+                        }, 250);
+                        $timeout(function () {
+                            $WowheadPower.refreshLinks();
+                        }, 500);
+                        $timeout(function () {
+                            $scope.loadItems = true;
+                        }, 1250);
+                    });
+                }
+
+                if (!$scope.gnews) {
+
+                    GetData.getNews().then(
+                        // Success
+                        function (answer) {
+                            $scope.gnews = angular.fromJson(answer.data);
+                            $scope.$storage['gnews'] = angular.fromJson(answer.data);
+                        },
+                        // Fail
+                        function (reason) {
+                            $scope.$storage['gnews'] = angular.fromJson(reason.status);
+                        }
+                    ).finally(function () {
+
+                        if ($scope.$storage['gnews'] == '404') {
+                            updateData()
+                        } else if (timeSince($scope.$storage['gnews']['time']) >= 3600) {
+                            updateData()
+                        } else {
+
+                        }
+                        // Refresh wowhead links
+                        $timeout(function () {
+                            $scope.loaderIcon = false;
+                        }, 250);
+                        $timeout(function () {
+                            $WowheadPower.refreshLinks();
+                        }, 500);
+                        $timeout(function () {
+                            $scope.loadItems = true;
+                        }, 1250);
+                    });
+
+                }
+            }
+            ]
+        })
         .state('feed', {
             url: "/feed/:char",
             templateUrl: "partials/feed.html",
             controller: ['battleNetApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', function (battleNetApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData) {
                 battleNetApi.wow.character.feed({ name: $stateParams.char, realm: serverName }).then(function (response) {
                     $scope.feed = angular.fromJson(response.data);
+                    
                 });
             }
             ]
