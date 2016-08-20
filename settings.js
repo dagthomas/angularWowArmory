@@ -1,5 +1,5 @@
 //  Need to fill in your apikey
-var apikey = "jmhwq3qnuhgueu4x9ya7q4ph9cu6yhzs";
+var apikey = "";
 var region = "eu";
 var minlevel = 100;
 // Guild ranks are different for each guild - please input the correct values here.
