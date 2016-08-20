@@ -1,0 +1,39 @@
+{
+  "name": "angularWowArmory",
+  "description": "Personal guild armory for World of Warcraft - with PHP caching of data.",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "wow",
+    "armory",
+    "worldofwarcraft"
+  ],
+  "authors": [
+    "Dag Thomas Olsen"
+  ],
+  "license": "MIT",
+  "homepage": "http://wow.theaxe.men/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "~1.4.7",
+    "ngstorage": "^0.3.11",
+    "angular-filter": "^0.5.9",
+    "angular-ui-router": "ui-router#^0.3.1",
+    "angular-material-data-table": "^0.10.9",
+    "angular-material": "^1.0.9",
+    "ng-battlenet": "*",
+    "angular-sanitize": "^1.5.8",
+    "angular-aside": "^1.3.2",
+    "angular-loading-bar": "^0.9.0"
+  },
+  "resolutions": {
+    "angular": "1.5.8"
+  }
+}

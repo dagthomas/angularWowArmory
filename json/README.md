@@ -1,0 +1,1 @@
+Folder for storing json files via php - needs to have the rights to write files.

@@ -1,0 +1,47 @@
+    <md-toolbar layout-padding class="md-accent" ng-show="loadItems">
+
+    <div layout="row" layout-align="center center" ng-show="filterOn" class="fade">
+        <md-radio-group layout="row" ng-model="selectedFilter.class">
+            <md-radio-button value="{{class.id}}" class="md-primary class{{class.id}}" ng-repeat="class in classes" ng-click="ChooseClass(class)" ng-bind-html="class.class"></md-radio-button>
+        </md-radio-group>
+    </div>
+    <div layout="row" layout-align="center center" ng-show="filterOn" class="fade">
+        <md-radio-group layout="row" ng-model="selectedFilter.rank">
+            <md-radio-button value="{{rank.id}}" class="md-primary" ng-repeat="rank in ranks" ng-click="ChooseRank(rank)" ng-if="rank.rank != ''" ng-bind-html="rank.rank"></md-radio-button>
+        </md-radio-group>
+    </div>
+    <div layout="row" layout-align="space-between center">
+        <div>
+            <h4 ui-sref="guild()" ng-bind-html="guild.name + ', ' + region.toUpperCase() + '-' + guild.realm" class="pointer"></h4>
+        </div>
+        <div>
+            <div layout="row"  layout-align="center center" ng-if="page == 1">
+
+                    <md-input-container md-theme="alt">
+                        <md-icon>search</md-icon>
+                        <input ng-model="sok">
+                    </md-input-container>
+
+                    <md-input-container md-theme="alt" ng-show="!selectedFilter.class && !selectedFilter.rank">
+                        <md-icon ng-click="filterOn = !filterOn" class="filterIcon pointer">list
+                            <md-tooltip md-direction="right" class="filterTT" ng-if="filterOn" ng-bind-html="close_filter_string"></md-tooltip>
+                            <md-tooltip md-direction="right" class="filterTT" ng-if="!filterOn" ng-bind-html="open_filter_string"></md-tooltip>
+                        </md-icon>
+                    </md-input-container>
+
+                    <md-input-container md-theme="alt" ng-show="selectedFilter.class || selectedFilter.rank">
+                        <md-icon ng-click="resetFilter()" class="filterIcon pointer">delete forever
+                            <md-tooltip md-direction="right" class="filterTT" ng-bind-html="delete_filter_string"></md-tooltip>
+                        </md-icon>
+                    </md-input-container>
+
+            </div>
+        </div>
+        <div>
+            <h4 class="pointer">
+              <strong ng-bind-html="menu_string" ui-sref="guildnews()" ></strong>
+            </h4>
+        </div>
+    </div>
+
+</md-toolbar>

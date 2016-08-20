@@ -1,0 +1,178 @@
+<md-content class="fade" ng-show="loadItems">
+    <div class="pageTitle">
+        <div layout="row" layout-align="center center">
+            <div layout-padding ng-if="char">
+                <h1 class="class{{char.class}} nospacing fade mid charName" ng-bind-html="char.name"></h1>
+                <h4 ng-if="talent.selected" ng-repeat="talent in char.talents" class="nopad nomarg mid">
+                    <span ng-bind-html="talent.spec.name + ', ' + talent.spec.role"></span>
+                    <span>( </span>
+                    <span class="pointer" ng-if="char.items.averageItemLevelEquipped <= (raidReady - 1)" ng-style="char.items.averageItemLevelEquipped <= (raidReady - 1) && {'color': 'red'}">
+                    <span ng-bind-html="'-' + (raidReady - char.items.averageItemLevelEquipped) + ', '"></span>
+                    <span ng-bind-html="raidready_string"></span>
+                    <md-tooltip md-direction="right" class="md-accent blacktip">
+                        <span>{{raidReady}}{{ilvl_string}} {{raidReady - char.items.averageItemLevelEquipped}} ilvl</span>
+                    </md-tooltip>
+                    </span>
+                    <span ng-if="char.items.averageItemLevelEquipped >= raidReady" ng-bind-html="raidready_string2"></span> 
+                    <span> )</span>                   
+                </h4>
+
+                <h5 ng-if="subtractDates(char.feed[0].timestamp) > 1" class="nopad nomarg mid" ng-show="loadItems" ng-bind-html="activity_string + ' ' + subtractDates(char.feed[0].timestamp) + ' ' + since_string + '.' "></h5>
+                <h5 ng-if="subtractDates(char.feed[0].timestamp) == 1" class="nopad nomarg mid" ng-show="loadItems" ng-bind-html="activity_string + ', ' + today_string + '.'"></h5>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</md-content>
+<div layout-gt-md="row" layout-align="center start">
+    <md-content class="page-container">
+        <div class="page fade" ng-show="loadItems">
+            <div layout="row" layout-padding ng-show="loadItems" class="fade">
+                <div ng-if="char" flex>
+                    <h2 class="lootTable" ng-class="{'glow': char.items.averageItemLevelEquipped >= raidReady, 'glow2': char.items.averageItemLevelEquipped >= raidReady+20, 'glow3': char.items.averageItemLevelEquipped >= raidReady+40}"
+                        ng-bind-html="items_itemlevel_string + char.items.averageItemLevelEquipped"></h2>
+                    <table>
+                        <tr ng-repeat="(key, value) in char.items" ng-if="key != 'averageItemLevel' && key != 'averageItemLevelEquipped'">
+                            <td ng-style="value.itemLevel <= (raidReady - 1) && {'color': 'red'}" ng-bind-html="value.itemLevel"></td>
+                            <td>
+                                <a target="_blank" class="qual{{value.quality}}" ng-href="http://www.wowhead.com/item={{value.id}}" rel="bonus={{getBonus(value.bonusLists | flatten)}} pcs={{getBonus(value.tooltipParams.set | flatten)}}  ench={{value.tooltipParams.enchant}} gems={{value.tooltipParams.gem0}}:{{value.tooltipParams.gem1}} upgd={{value.tooltipParams.upgrade.current}}"
+                                    ng-bind-html="value.name"></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </md-content>
+
+    <md-content class="page-container">
+        <div class="page fade" ng-show="loadItems">
+            <h2 class="lootTable" ng-bind-html="stats_string"></h2>
+            <div layout="row">
+                <div flex>
+                    <h4 ng-bind-html="stats_primary_string"></h4>
+                    <table>
+                        <tr>
+                            <td>HP:</td>
+                            <td ng-bind-html="char.stats.health"></td>
+                        </tr>
+                        <tr>
+                            <td>Sta:</td>
+                            <td ng-bind-html="char.stats.sta"></td>
+                        </tr>
+                        <tr ng-if="char.stats.str > char.stats.int && char.stats.str > char.stats.agi">
+                            <td>Str:</td>
+                            <td ng-bind-html="char.stats.str"></td>
+                        </tr>
+                        <tr ng-if="char.stats.agi > char.stats.int && char.stats.agi > char.stats.str">
+                            <td>Agi:</td>
+                            <td ng-bind-html="char.stats.agi"></td>
+                        </tr>
+                        <tr ng-if="char.stats.int > char.stats.str && char.stats.int > char.stats.agi">
+                            <td>Int:</td>
+                            <td ng-bind-html="char.stats.int"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div flex>
+                    <h4>{{stats_secondary_string}}</h4>
+                    <table>
+                        <tr ng-if="char.stats.mastery != 0">
+                            <td>Mastery:</td>
+                            <td ng-bind-html="(char.stats.mastery | percent: 100: true )+ '%'"></td>
+                        </tr>
+                        <tr ng-if="char.stats.crit >= char.stats.spellCrit">
+                            <td>Crit:</td>
+                            <td ng-bind-html="(char.stats.crit | percent: 100: true )+ '%'"></td>
+                        </tr>
+                        <tr ng-if="char.stats.spellCrit != char.stats.crit">
+                            <td>Spell crit:</td>
+                            <td ng-bind-html="(char.stats.spellCrit | percent: 100: true )+ '%'"></td>
+                        </tr>
+                        <tr ng-if="char.stats.haste != 0">
+                            <td>Haste:</td>
+                            <td ng-bind-html="(char.stats.haste | percent: 100: true )+ '%'"></td>
+                        </tr>
+                    </table>
+                    <table ng-if="talent.selected && talent.spec.role == 'TANK'" ng-repeat="talent in char.talents">
+                        <tr>
+                            <td>Armor:</td>
+                            <td ng-bind-html="char.stats.armor"></td>
+                        </tr>
+                        <tr>
+                            <td>Dodge:</td>
+                            <td ng-bind-html="(char.stats.dodge | percent: 100: true )+ '%'"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Parry:</td>
+                            <td ng-bind-html="(char.stats.parry | percent: 100: true )+ '%'"></td>
+                        </tr>
+                        <tr>
+                            <td>Block:</td>
+                            <td ng-bind-html="(char.stats.block | percent: 100: true )+ '%'"></td>
+                        </tr>
+
+                    </table>
+                    <table ng-if="talent.selected && talent.spec.role == 'HEALING'" ng-repeat="talent in char.talents">
+                        <tr ng-if="char.stats.mana5Combat != 0">
+                            <td>Regen:</td>
+                            <td ng-bind-html="char.stats.mana5Combat"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div layout="row">
+                <div flex>
+                    <h2 class="lootTable" ng-bind-html="stats_talents_string"></h2>
+                    <table>
+                        <tr ng-if="talent.selected" ng-repeat="talent in char.talents">
+                            <td><span class="talentSpell" ng-repeat="t in talent.talents | orderBy:'tier'"> 
+                                <span ng-bind-html="'Tier ' + (t.tier+1) + ' '"></span>
+                                <p class="inline">
+                                    <a class="qual{{loot.quality}}" target="_blank" ng-href="http://www.wowhead.com/spell={{t.spell.id}}" ng-bind-html="t.spell.name"></a>
+                                </p>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </md-content>
+
+    <md-content class="page-container">
+        <div class="page fade" ng-show="loadItems">
+            <h2 ng-bind-html="history_string"></h2>
+            <div ng-repeat="loot in char.feed | limitTo: 20" ng-if="loot.type != 'CRITERIA'">
+                <a class="qual{{loot.quality}}" target="_blank" ng-href="http://www.wowhead.com/item={{loot.itemId}}" rel="bonus={{getBonus(loot.bonusLists | flatten)}} pcs={{getBonus(loot.tooltipParams.set | flatten)}}  ench={{loot.tooltipParams.enchant}} gems={{loot.tooltipParams.gem0}}:{{loot.tooltipParams.gem1}} upgd={{value.tooltipParams.upgrade.current}}"
+                    ng-if="loot.type == 'LOOT'" ng-bind-html="loot.timestamp | date:'dd-MM-yyyy HH:mm:ss'"></a>
+                <a target="_blank" ng-href="http://www.wowhead.com/achievement={{loot.achievement.id}}" ng-if="loot.type == 'BOSSKILL' || loot.type == 'ACHIEVEMENT'"
+                    ng-bind-html="loot.achievement.title"></a>
+                <!--<h4><a ng-href="http//www.wowhead.com/achievement={{loot.achievement.id}}" rel="criteria={{loot.criteria.id}}" ng-if="loot.type == 'ACHIEVEMENT' || loot.type == 'CRITERIA'">{{loot.achievement.title}}</a></h4>   -->
+            </div>
+        </div>
+    </md-content>
+
+</div>
+<md-content class="page-container">
+    <div class="page fade" ng-show="loadItems">
+        <div layout-wrap>
+            <div layout-gt-md="row" layout-xs="column" ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}">
+                <div flex ng-repeat="uni in unit | filter:sok | groupBy:'rank'">
+
+                    <div ng-repeat="g in uni | filter:{ character: {class: char.class } } : true | orderBy: 'character.name'" class="fade">
+                        <h4 ng-if="$first" ng-bind-html="getRank(g.rank)"></h4>
+                        <h3 class=" pointer">
+                            <a ui-sref="char({ char: g.character.name })" class="class{{g.character.class}} guildliste" ng-bind-html="g.character.name"
+                                ng-class="{'selected': char.name.search(g.character.name) != -1}"></a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>
