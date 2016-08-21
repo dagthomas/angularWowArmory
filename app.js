@@ -1,22 +1,28 @@
+
+// Function to calculate time since input data.
 function timeSince(date) {
     var returndate = (new Date().getTime() / 1000).toString().split('.').shift() - date.toString().split('.').shift();
     return returndate;
 }
 
+// Prototype to create hashCode out of a string.
+// "Prôóf" -> 77519973
 String.prototype.hashCode = function () {
-    var hash = 0, i, chr, len;
-    if (this.length === 0) return hash;
-    for (i = 0, len = this.length; i < len; i++) {
-        chr = this.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; 
+    var hashcode = 0, i, s, l;
+    if (this.length === 0) return hashcode;
+    for (i = 0, l = this.length; i < l; i++) {
+        s = this.charCodeAt(i);
+        hashcode = ((hashcode << 5) - hashcode) + s;
+        hashcode |= 0; 
     }
-    return hash;
+    return hashcode;
 };
 
 var axeApp = angular.module("axeApp", ["ngSanitize", "ngStorage", "ngBattleNet", "ui.router", "angular.filter", "ngMaterial", "md.data.table", "getData", "ngSanitize", "angular-loading-bar"]);
 
 axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider', '$mdThemingProvider', '$compileProvider', '$sceDelegateProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, battleNetConfigProvider, $mdThemingProvider, $compileProvider, $sceDelegateProvider, $locationProvider) {
+
+// Sets the API key and region from the settings.js file
 battleNetConfigProvider.setApiKey(apikey);
 battleNetConfigProvider.setDefaultRegion(region);
 $sceDelegateProvider.resourceUrlWhitelist(['**']);
@@ -46,14 +52,17 @@ $stateProvider
                 function (answer) {
                     $scope.char = angular.fromJson(answer.data);
                     $scope.$storage[$stateParams.char] = angular.fromJson(answer.data);
+                    $scope.$storage[$stateParams.char]['time'] = new Date().getTime() / 1000;
                 },
                 // Fail
                 function (reason) {
                     $scope.$storage[$stateParams.char] = angular.fromJson(reason.status);
                 }
             ).finally(function () {
+                // If char has value 404, reload it.
                 if ($scope.$storage[$stateParams.char] == '404') {
                     $rootScope.updateData($stateParams.char)
+                // If timestamp is old, reload it.
                 } else if (timeSince($scope.$storage[$stateParams.char]['time']) >= 3600) {
                     $rootScope.updateData($stateParams.char)
                 } else {
@@ -64,7 +73,7 @@ $stateProvider
                 }, 250);
                 $timeout(function () {
                     $WowheadPower.refreshLinks();
-                }, 750);
+                }, 850);
                 $timeout(function () {
                     $scope.loadItems = true;
                 }, 1250);
@@ -96,6 +105,7 @@ $stateProvider
                 function (answer) {
                     $scope.gnews = angular.fromJson(answer.data);
                     $scope.$storage['gnews'] = angular.fromJson(answer.data);
+                    $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
                 },
                 // Fail
                 function (reason) {
@@ -140,6 +150,7 @@ $stateProvider
                     function (answer) {
                         $scope.gnews = angular.fromJson(answer.data);
                         $scope.$storage['gnews'] = angular.fromJson(answer.data);
+                        $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
                     },
                     // Fail
                     function (reason) {
@@ -157,7 +168,7 @@ $stateProvider
                     }, 250);
                     $timeout(function () {
                         $WowheadPower.refreshLinks();
-                    }, 750);
+                    }, 850);
                     $timeout(function () {
                         $scope.loadItems = true;
                     }, 1250);
@@ -310,6 +321,7 @@ GetData.getGuild().then(
     function (answer) {
         $scope.guild = angular.fromJson(answer.data);
         $scope.$storage['guild'] = angular.fromJson(answer.data);
+        $scope.$storage['guild']['time'] = new Date().getTime() / 1000;
     },
     // Fail
     function (reason) {

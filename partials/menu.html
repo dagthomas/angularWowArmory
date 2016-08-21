@@ -2,12 +2,12 @@
 
     <div layout="row" layout-align="center center" ng-show="filterOn" class="fade">
         <md-radio-group layout="row" ng-model="selectedFilter.class">
-            <md-radio-button value="{{class.id}}" class="md-primary class{{class.id}}" ng-repeat="class in classes" ng-click="ChooseClass(class)" ng-bind-html="class.class"></md-radio-button>
+            <md-radio-button value="{{class.id}}" class="md-primary class{{class.id}}" ng-repeat="class in classes" ng-click="ChooseClass(class)" ng-bind-html="class.class" aria-label="class.class"></md-radio-button>
         </md-radio-group>
     </div>
     <div layout="row" layout-align="center center" ng-show="filterOn" class="fade">
         <md-radio-group layout="row" ng-model="selectedFilter.rank">
-            <md-radio-button value="{{rank.id}}" class="md-primary" ng-repeat="rank in ranks" ng-click="ChooseRank(rank)" ng-if="rank.rank != ''" ng-bind-html="rank.rank"></md-radio-button>
+            <md-radio-button value="{{rank.id}}" class="md-primary" ng-repeat="rank in ranks" ng-click="ChooseRank(rank)" ng-if="rank.rank != ''" ng-bind-html="rank.rank" aria-label="rank.rank"></md-radio-button>
         </md-radio-group>
     </div>
     <div layout="row" layout-align="space-between center">

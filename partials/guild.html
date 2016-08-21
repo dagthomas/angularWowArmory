@@ -1,4 +1,4 @@
-<md-content class="page-container" ng-show="loadItems">
+<md-content class="page-container fade" ng-show="loadItems">
     <div ng-if="guild">
         <div layout-gt-md="row" layout-xs="column" layout-wrap>
             <div flex ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}">

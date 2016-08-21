@@ -159,7 +159,7 @@
 
 </div>
 <md-content class="page-container">
-    <div class="page fade" ng-show="loadItems">
+    <div class="page fade" ng-show="loadItems && char">
         <div layout-wrap>
             <div layout-gt-md="row" layout-xs="column" ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}">
                 <div flex ng-repeat="uni in unit | filter:sok | groupBy:'rank'">
