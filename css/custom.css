@@ -463,21 +463,21 @@ md-toolbar.md-default-theme:not(.md-menu-toolbar) md-icon, md-toolbar:not(.md-me
 
 
 #loading-bar .bar {
-  background: #ff8000;
+  background: #fefefe;
 }
 
 /* Fancy blur effect */
 #loading-bar .peg {
-  -moz-box-shadow: #ff8000 1px 0 6px 1px;
-  -ms-box-shadow: #ff8000 1px 0 6px 1px;
-  -webkit-box-shadow: #ff8000 1px 0 6px 1px;
-  box-shadow: #ff8000 1px 0 6px 1px;
+  -moz-box-shadow: #fefefe 1px 0 6px 1px;
+  -ms-box-shadow: #fefefe 1px 0 6px 1px;
+  -webkit-box-shadow: #fefefe 1px 0 6px 1px;
+  box-shadow: #fefefe 1px 0 6px 1px;
 }
 
 
 #loading-bar-spinner .spinner-icon {
-  border-top-color:  #ff8000;
-  border-left-color: #ff8000;
+  border-top-color:  #fefefe;
+  border-left-color: #fefefe;
 }
 
 .md-autocomplete-suggestions-container.md-default-theme li, .md-autocomplete-suggestions-container li {
