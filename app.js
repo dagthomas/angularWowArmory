@@ -73,7 +73,7 @@ $stateProvider
                 }, 250);
                 $timeout(function () {
                     $WowheadPower.refreshLinks();
-                }, 850);
+                }, 750);
                 $timeout(function () {
                     $scope.loadItems = true;
                 }, 1250);
@@ -168,7 +168,7 @@ $stateProvider
                     }, 250);
                     $timeout(function () {
                         $WowheadPower.refreshLinks();
-                    }, 850);
+                    }, 750);
                     $timeout(function () {
                         $scope.loadItems = true;
                     }, 1250);
@@ -387,15 +387,6 @@ $rootScope.updateData = function (inputString) {
             }
         });
     }
-    $timeout(function () {
-        $scope.loaderIcon = false;
-    }, 250);
-    $timeout(function () {
-        $WowheadPower.refreshLinks();
-    }, 500);
-    $timeout(function () {
-        $scope.loadItems = true;
-    }, 1250);
 };
 }]);
 
