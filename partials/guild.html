@@ -1,15 +1,11 @@
 <md-content class="page-container fade" ng-show="loadItems">
     <div ng-if="guild">
         <div layout-gt-md="row" layout-xs="column" layout-wrap>
-            <div flex ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}">
-                <div ng-repeat="uni in unit | filter:sok | groupBy:'rank'">
-
-                    <div ng-repeat="g in uni | filter:{ character: {class: filter.class.id } } : true | filter:{ rank: filter.rank.id } : true  | orderBy: 'character.name'"
-                        class="fade" ng-if="g.character.level >= minlevel">
-                        <h4 ng-if="$first" ng-bind-html="getRank(g.rank)"></h4>
-                        <h3 class=" pointer">
-                            <a ui-sref="char({ char: g.character.name })" class="class{{g.character.class}} guildliste" ng-bind-html="g.character.name"></a>
-                        </h3>
+            <div flex ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}" ng-if="(unit | filter:sok | filter:{ character: {class: filter.class.id } } : true | filter:{ rank: filter.rank.id } : true ).length > 0">
+                <div ng-repeat="uni in unit | filter:sok | groupBy:'rank'" class="rankHeader">
+                    <div ng-repeat="g in uni | filter:{ character: {class: filter.class.id } } : true | filter:{ rank: filter.rank.id } : true  | orderBy: 'character.name'" class="fade" ng-if="g.character.level >= minlevel">
+                        <h4 ng-if="$first" ng-bind-html="getRank(g.rank)" class="light"></h4>
+                        <a ui-sref="char({ char: g.character.name })" class="class{{g.character.class}} guildliste"><h3 class=" pointer" ng-bind-html="g.character.name"></h3></a>
                     </div>
                 </div>
             </div>

@@ -2,35 +2,58 @@
     <div class="pageTitle">
         <div layout="row" layout-align="center center">
             <div layout-padding>
-                <h1 class="class{{char.class}} nospacing fade mid charName" ng-bind-html="newstitle_string"></h1>
+
+                <md-input-container md-no-float>
+                    <label>Lootfilter</label>
+                    <md-select ng-model="selectedNews" md-container-class="lootFilter">
+                        <md-optgroup label="items">
+                            <md-option ng-value="t.type" ng-repeat="t in raidTypes" ng-click="wowHead()">{{t.name}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+
+
             </div>
             <div>
-                <!--  <ng-include ng-if="char.items.averageItemLevelEquipped > (raidReady - 1)" src="'partials/skull.html'"></ng-include>-->
             </div>
         </div>
     </div>
 </md-content>
-<div layout-gt-md="row" layout-align="center start">
-    <md-content class="page-container" ng-repeat="loot in gnews.news | groupBy:'type' " ng-show="gnews.news[0]">
-        <div class="page fade" ng-show="loadItems">
-                    <div ng-repeat="l in loot | limitTo:15" ng-show="loadItems" class="fade">
-                            <h2 ng-if="$first && l.type == 'itemCraft'" class="newsItem" ng-bind-html="craft_string"></h2>
-                            <h2 ng-if="$first && l.type == 'itemPurchase'" class="newsItem" ng-bind-html="bought_string"></h2>
-                            <h2 ng-if="$first && l.type == 'itemLoot'" class="newsItem" ng-bind-html="looted_string"></h2>
-                            <h2 ng-if="$first && l.type == 'playerAchievement'" class="newsItem" ng-bind-html="achieved_string"></h2>
-                            <div class="md-list-item-text">
-                                <a ui-sref="char({ char: l.character })" class="class{{l.character.class}} guildliste">
-                                    <h3 class="charname" ng-bind-html="l.character + ', ' + (l.timestamp | date:'dd.MM HH:mm')"></h3>
-                                </a>
-                                <h4 ng-if="l.type != 'playerAchievement'">
-                                    <a target="_blank" ng-href="http://www.wowhead.com/item={{l.itemId}}" rel="bonus={{getBonus(l.bonusLists | flatten)}}"></a>
-                                </h4>
-                                <h4 ng-if="l.type == 'playerAchievement'">
-                                    <a target="_blank" ng-href="http://www.wowhead.com/achievement={{l.achievement.id}}"></a>
-                                </h4>
-                            </div>
-                    </div>
 
+<div layout-gt-md="row" layout-align="center stretch" class="fade" ng-show="loadItems && gnews">
+    <md-content flex class="page-container">
+        <div class="page fade">
+            <div layout="row">
+                <div flex>
+                                        <div layout="row">
+                        <div flex ng-repeat="loot in gnews.news | groupBy:'type'">
+                            <div ng-repeat="l in loot | limitTo:15">
+                                <h2 ng-if="$first && l.type == 'itemCraft'" class="md-title light" ng-bind-html="craft_string"></h2>
+                                <h2 ng-if="$first && l.type == 'itemPurchase'" class="md-title light" ng-bind-html="bought_string"></h2>
+                                <h2 ng-if="$first && l.type == 'itemLoot'" class="md-title light" ng-bind-html="looted_string"></h2>
+                                <h2 ng-if="$first && l.type == 'playerAchievement'" class="md-title light" ng-bind-html="achieved_string"></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <md-list flex class="md-2-line nopad nomarg" ng-repeat="loot in gnews.news | filter: {context: selectedNews } : true   | groupBy:'type'">
+                            <md-list-item class="md-list-item-text nopad nomarg bottomSpace" ng-repeat="l in loot | limitTo:15">
+                                <div class="md-list-item-text nopad nomarg">
+                                    <h3 class="charname">
+                                        <a ui-sref="char({ char: l.character })" class="class{{l.character.class}} guildliste" ng-bind-html="l.character"></a>
+                                    </h3>
+                                    <h4 ng-if="l.type != 'playerAchievement'">
+                                        <a target="_blank" ng-href="http://www.wowhead.com/item={{l.itemId}}" rel="bonus={{getBonus(l.bonusLists | flatten)}}">ITEM</a>
+                                    </h4>
+                                    <h4 ng-if="l.type == 'playerAchievement'">
+                                        <a target="_blank" ng-href="http://www.wowhead.com/achievement={{l.achievement.id}}">ACHIEVE</a>
+                                    </h4>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </div>
+            </div>
         </div>
     </md-content>
 </div>

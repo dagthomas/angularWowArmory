@@ -52,6 +52,9 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         $scope.char = angular.fromJson(answer.data);
                         $scope.$storage[$stateParams.char] = angular.fromJson(answer.data);
                         $scope.$storage[$stateParams.char]['time'] = new Date().getTime() / 1000;
+                        if ($scope.char) {
+                            $scope.char['name'] = $scope.char['titles'][Math.floor(Math.random() * $scope.char.titles.length)].name.replace("%s", $scope.char['name']);
+                        }
                     },
                     // Fail
                     function (reason) {
@@ -65,7 +68,6 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     } else if (timeSince($scope.$storage[$stateParams.char]['time']) >= 3600) {
                         $rootScope.updateData($stateParams.char)
                     }
-                    $scope.$storage[$stateParams.char]['name'] = $scope.$storage[$stateParams.char]['titles'][Math.floor(Math.random() * $scope.char.titles.length)].name.replace("%s", $scope.$storage[$stateParams.char]['name']);
 
                     $timeout(function () {
                         $rootScope.loaderIcon = false;
@@ -96,53 +98,18 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
             templateUrl: "partials/gnews.html",
             controller: ['battleNetApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', '$rootScope', function (battleNetApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData, $rootScope) {
                 $rootScope.page = 3;
-                $rootScope.loadItems = false;
-                $rootScope.loaderIcon = true;
-                if (!$scope.gnews) {
-                    GetData.getNews().then(
-                        // Success
-                        function (answer) {
-                            $scope.gnews = angular.fromJson(answer.data);
-                            $scope.$storage['gnews'] = angular.fromJson(answer.data);
-                            $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
-                        },
-                        // Fail
-                        function (reason) {
-                            $scope.$storage['gnews'] = angular.fromJson(reason.status);
-                        }
-                    ).finally(function () {
-                        if ($scope.$storage['gnews'] == '404') {
-                            $rootScope.updateData(gnews)
-                        } else if (timeSince($scope.$storage['gnews']['time']) >= 3600) {
-                            $rootScope.updateData(gnews)
-                        }
-                        $timeout(function () {
-                            $rootScope.loaderIcon = false;
-                        }, 250);
-                        $timeout(function () {
-                            $WowheadPower.refreshLinks();
-                        }, 1000);
-                        $timeout(function () {
-                            $rootScope.loadItems = true;
-                        }, 1250);
-                    });
-                }
-            }
-            ]
-        })
-        .state('guildnews_type', {
-            url: "/guildnews/:type",
-            templateUrl: "partials/gnews_type.html",
-            controller: ['battleNetApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', '$rootScope', '$state', function (battleNetApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData, $rootScope, $state) {
-                $rootScope.page = 3;
                 $scope.newsType = $stateParams.type;
-                $scope.raidTypes = [{ "type": "dungeon-normal", "name": "Normal Dungeon" }, { "type": "dungeon-heroic", "name": "Heroic Dungeon" }, { "type": "dungeon-mythic", "name": "Mythic Dungeon" }, { "type": "raid-normal", "name": "Normal Raid" }, { "type": "raid-heroic", "name": "Heroic Raid" }, { "type": "raid-mythic", "name": "Mythic Raid" }];
+                $scope.raidTypes = [{ "name": "Ingen filter" },{ "type": "dungeon-normal", "name": "N.Dungeon" }, { "type": "dungeon-heroic", "name": "H.Dungeon" }, { "type": "dungeon-mythic", "name": "M.Dungeon" }, { "type": "raid-normal", "name": "N.Raid" }, { "type": "raid-heroic", "name": "H.Raid" }, { "type": "raid-mythic", "name": "M.Raid" }];
                 $scope.changeNews = function (input) {
                     $state.go('guildnews_type', { type: input });
                 }
                 $rootScope.loadItems = false;
                 $rootScope.loaderIcon = true;
-
+                $scope.wowHead = function(){
+                    $timeout(function () {
+                            $WowheadPower.refreshLinks();
+                        }, 500);
+                }
                 if (!$scope.gnews) {
                     GetData.getNews().then(
                         // Success
@@ -247,9 +214,9 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
 
     $scope.classes = [{ "class": "Warrior", id: 1 }, { "class": "Paladin", id: 2 }, { "class": "Hunter", id: 3 }, { "class": "Rogue", id: 4 }, { "class": "Priest", id: 5 }, { "class": "Death Knight", id: 6 }, { "class": "Shaman", id: 7 }, { "class": "Mage", id: 8 }, { "class": "Warlock", id: 9 }, { "class": "Monk", id: 10 }, { "class": "Druid", id: 11 }, { "class": "Demon Hunter", id: 12 }];
 
-$scope.reverseFilter = function(){
-$rootScope.filterOn = !$rootScope.filterOn;
-}
+    $scope.reverseFilter = function () {
+        $rootScope.filterOn = !$rootScope.filterOn;
+    }
     $rootScope.filterOn = false;
 
     $scope.onSwipeRight = function () {
