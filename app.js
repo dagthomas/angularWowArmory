@@ -46,7 +46,6 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                 $rootScope.page = 2;
                 $rootScope.loadItems = false;
                 $rootScope.loaderIcon = true;
-
                 GetData.getChar($stateParams.char.hashCode()).then(
                     // Success
                     function (answer) {
@@ -200,7 +199,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
         .accentPalette('green');
 }]);
 axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'dataJson', 'battleNetApi', '$stateParams', '$localStorage', 'GetData', function ($scope, $http, $timeout, $rootScope, $state, dataJson, battleNetApi, $stateParams, $localStorage, GetData) {
-
+    $rootScope.sok = "";
     $scope.$storage = $localStorage;
 
     // Set application version, delete cache if version changes.
@@ -244,10 +243,14 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
     $scope.guildName = guildName;
     $scope.serverName = serverName;
 
+
+
     $scope.classes = [{ "class": "Warrior", id: 1 }, { "class": "Paladin", id: 2 }, { "class": "Hunter", id: 3 }, { "class": "Rogue", id: 4 }, { "class": "Priest", id: 5 }, { "class": "Death Knight", id: 6 }, { "class": "Shaman", id: 7 }, { "class": "Mage", id: 8 }, { "class": "Warlock", id: 9 }, { "class": "Monk", id: 10 }, { "class": "Druid", id: 11 }, { "class": "Demon Hunter", id: 12 }];
 
-
-    $scope.filterOn = false;
+$scope.reverseFilter = function(){
+$rootScope.filterOn = !$rootScope.filterOn;
+}
+    $rootScope.filterOn = false;
 
     $scope.onSwipeRight = function () {
         $state.go('guildnews');

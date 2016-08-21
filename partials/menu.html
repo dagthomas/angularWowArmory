@@ -15,15 +15,15 @@
             <h4 ui-sref="guild()" ng-bind-html="guild.name + ', ' + region.toUpperCase() + '-' + guild.realm" class="pointer"></h4>
         </div>
         <div>
-            <div layout="row"  layout-align="center center" ng-if="page == 1">
+            <div layout="row"  layout-align="center center" ng-show="page == 1">
 
                     <md-input-container md-theme="alt">
                         <md-icon>search</md-icon>
-                        <input ng-model="sok">
+                        <input ng-model="$root.sok">
                     </md-input-container>
 
                     <md-input-container md-theme="alt" ng-show="!selectedFilter.class && !selectedFilter.rank">
-                        <md-icon ng-click="filterOn = !filterOn" class="filterIcon pointer">list
+                        <md-icon ng-click="reverseFilter(filterOn)" class="filterIcon pointer">list
                             <md-tooltip md-direction="right" class="filterTT" ng-if="filterOn" ng-bind-html="close_filter_string"></md-tooltip>
                             <md-tooltip md-direction="right" class="filterTT" ng-if="!filterOn" ng-bind-html="open_filter_string"></md-tooltip>
                         </md-icon>
