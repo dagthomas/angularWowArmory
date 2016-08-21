@@ -333,13 +333,13 @@ GetData.getGuild().then(
 $rootScope.updateData = function (inputString) {
     if (inputString == 'gnews') {
         battleNetApi.wow.guild.news({ name: $scope.guildName, realm: $scope.serverName }).then(function (response) {
-            $scope.char = angular.fromJson(response.data);
-            $scope.$storage[inputString] = angular.fromJson(response.data);
-            $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
+            $scope['gnews'] = angular.fromJson(response.data);
+            $scope.$storage['gnews'] = angular.fromJson(response.data);
+            $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
 
         }).finally(function () {
-            if ($scope.$storage[inputString].code != '504') {
-                dataJson.saveData($scope.$storage[inputString], inputString + ".json");
+            if ($scope.$storage['gnews'].code != '504') {
+                dataJson.saveData($scope.$storage['gnews'], "gnews.json");
             }
             if ($scope.char.code == '504') {
                 location.reload();
@@ -348,13 +348,13 @@ $rootScope.updateData = function (inputString) {
 
     } else if (inputString == 'guild') {
         battleNetApi.wow.guild.profile({ name: $scope.guildName, realm: $scope.serverName, fields: ['members', 'profile'] }).then(function (response) {
-            $scope.char = angular.fromJson(response.data);
-            $scope.$storage[inputString] = angular.fromJson(response.data);
-            $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
+            $scope['guild'] = angular.fromJson(response.data);
+            $scope.$storage['guild'] = angular.fromJson(response.data);
+            $scope.$storage['guild']['time'] = new Date().getTime() / 1000;
 
         }).finally(function () {
             if ($scope.$storage[inputString].code != '504') {
-                dataJson.saveData($scope.$storage[inputString], inputString + ".json");
+                dataJson.saveData($scope.$storage['guild'], "guild.json");
             }
             if ($scope.char.code == '504') {
                 location.reload();
