@@ -1,4 +1,4 @@
-// Henter inn plugins vi trenger
+// Load plugins we need
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -7,6 +7,7 @@ var del = require('del');
 var cleanCSS = require('gulp-clean-css');
 var htmlmin = require('gulp-htmlmin');
 
+// Configure files for distribution
 var config = {
     src: ['app.js'], 
     css: ['css/docs.css','css/custom.css'],
@@ -18,8 +19,7 @@ var config = {
     libraries: ['bower_components/angular/angular.min.js', 'bower_components/angular-material/angular-material.min.js', 'bower_components/angular-aria/angular-aria.min.js', 'bower_components/angular-animate/angular-animate.min.js', 'bower_components/angular-httpi/build/httpi.min.js', 'bower_components/ng-battlenet/dist/ng-battlenet.min.js', 'bower_components/angular-ui-router/release/angular-ui-router.min.js', 'bower_components/angular-filter/dist/angular-filter.min.js', 'bower_components/angular-material-data-table/dist/md-data-table.min.js', 'bower_components/ngstorage/ngStorage.js', 'bower_components/angular-sanitize/angular-sanitize.min.js', 'bower_components/angular-loading-bar/build/loading-bar.min.js'],
     libraryCss: ['bower_components/angular-material/angular-material.css', 'bower_components/angular-loading-bar/build/loading-bar.min.css']
 }
-
-//Sletter output fil(er)
+// Delete the prior files.
 gulp.task('clean', function () {
     return del(['dist/all.min.js']);
 });
@@ -41,6 +41,8 @@ gulp.task('cleanLibraries', function () {
 gulp.task('cleanLibraryCss', function () {
     return del(['dist/css/library.min.css']);
 });
+
+// Run specific scripts
 gulp.task('scripts', ['clean'], function () {
     return gulp.src(config.src)
         .pipe(ngAnnotate({
@@ -93,9 +95,10 @@ gulp.task('libraryCss', ['cleanLibraryCss'], function () {
       .pipe(concat('dist/css/library.min.css'))
       .pipe(gulp.dest('.'));
 });
-//Lager default task
+// Run everything by default.
 gulp.task('default', ['scripts', 'css', 'html', 'index', 'php', 'json', 'settings', 'libraries', 'libraryCss'], function () { });
 
-gulp.task('watch', function () {
-    return gulp.watch(config.src, ['scripts']);
-});
+// Used this in visual studio to automatically dump new library.
+//gulp.task('watch', function () {
+ //   return gulp.watch(config.src, ['scripts']);
+//});
