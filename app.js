@@ -80,9 +80,11 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     }, 250);
                     $timeout(function () {
                         $WowheadPower.refreshLinks();
-                            $rootScope.loadItems = true;
+                    }, 1000);
+                    $timeout(function () {
+                        $rootScope.loadItems = true;
+                    }, 1250);
 
-                    }, 750);
                 });
             }]
         })
@@ -140,8 +142,10 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         }, 250);
                         $timeout(function () {
                             $WowheadPower.refreshLinks();
+                        }, 1000);
+                        $timeout(function () {
                             $rootScope.loadItems = true;
-                        }, 750);
+                        }, 1250);
                     });
 
                 }
@@ -330,6 +334,15 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                 if ($scope.char.code == '504') {
                     location.reload();
                 }
+                $timeout(function () {
+                    $rootScope.loaderIcon = false;
+                }, 250);
+                $timeout(function () {
+                    $WowheadPower.refreshLinks();
+                }, 1000);
+                $timeout(function () {
+                    $rootScope.loadItems = true;
+                }, 1250);
             });
 
         } else if (inputString == 'guild') {
@@ -345,6 +358,15 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                 if ($scope.char.code == '504') {
                     location.reload();
                 }
+                $timeout(function () {
+                    $rootScope.loaderIcon = false;
+                }, 250);
+                $timeout(function () {
+                    $WowheadPower.refreshLinks();
+                }, 1000);
+                $timeout(function () {
+                    $rootScope.loadItems = true;
+                }, 1250);
             });
         } else {
             wowApi.character.profile({ name: inputString, realm: $scope.serverName, fields: ['items', 'feed', 'titles', 'stats', 'talents'] }).then(function (response) {
@@ -354,28 +376,32 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
 
             }).finally(function () {
                 if ($scope.$storage[inputString].code != '504') {
-                    angular.forEach($scope.$storage[inputString]['titles'], function(value, key) {
-                        if(value.selected){
-                     $scope.$storage[inputString]['name'] = $scope.$storage[inputString]['titles'][key].name.replace("%s", $scope.$storage[inputString]['name']);
-                   
-                    }
+                    angular.forEach($scope.$storage[inputString]['titles'], function (value, key) {
+                        if (value.selected) {
+                            $scope.$storage[inputString]['name'] = $scope.$storage[inputString]['titles'][key].name.replace("%s", $scope.$storage[inputString]['name']);
+
+                        }
                     });
-                   
+
                     dataJson.saveData($scope.$storage[inputString], inputString.hashCode() + ".json");
                 }
                 if ($scope.char.code == '504') {
                     location.reload();
                 }
+                $timeout(function () {
+                    $rootScope.loaderIcon = false;
+                }, 250);
+                $timeout(function () {
+                    $WowheadPower.refreshLinks();
+                }, 1000);
+                $timeout(function () {
+                    $rootScope.loadItems = true;
+                }, 1250);
             });
         }
 
-        $timeout(function () {
-            $rootScope.loaderIcon = false;
-        }, 250);
-        $timeout(function () {
-            $WowheadPower.refreshLinks();
-            $rootScope.loadItems = true;
-        }, 750);
+
+
     };
 }]);
 
