@@ -208,9 +208,9 @@
 <div class="fade" ng-show="loadItems && char">
     <md-content class="page-container fade">
         <div class="page">
-            <div ng-repeat="unit in guild.members | groupBy:'character.class'" class="guildlist list{{$index}}"
+            <div ng-repeat="unit in guild.members | groupBy:'character.class'" class="fade guildlist list{{$index}}"
                 ng-if="(unit | filter:sok | filter:{ character: {class: filter.class.id } } : true | filter:{ rank: filter.rank.id } : true ).length > 0">
-                <div layout-gt-md="row"  ng-repeat="uni in unit | filter:sok | groupBy:'rank'">
+                <div layout-gt-md="row"  ng-repeat="uni in unit | filter:sok | groupBy:'rank'" class="fade">
                                         <div ng-repeat="g in uni | filter:{ character: {class: char.class } } : true | orderBy: 'character.name'" class="fade">
                         <h3 ng-if="$first" ng-bind-html="getRank(g.rank)" class="charListHeader light"></h3>
                         </div>
