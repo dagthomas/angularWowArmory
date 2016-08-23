@@ -22,9 +22,5 @@
     "gulp-ng-annotate": "^2.0.0",
     "gulp-uglify": "^2.0.0",
     "pump": "^1.0.1"
-  },
-  "repository": {
-  "type": "git",
-  "url": "dagthomas/angularWowArmory"
   }
 }

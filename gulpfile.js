@@ -10,7 +10,7 @@ var htmlmin = require('gulp-htmlmin');
 // Configure files for distribution
 var config = {
     src: ['app.js'], 
-    css: ['css/docs.css','css/custom.css'],
+    css: ['css/custom.css'],
     html: ['partials/*.html'], 
     index: ['index.html'], 
     php: ['php/*.php'], 

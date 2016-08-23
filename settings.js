@@ -1,5 +1,5 @@
 //  Need to fill in your apikey
-var apikey = "";
+var apikey = "jmhwq3qnuhgueu4x9ya7q4ph9cu6yhzs";
 var region = "eu";
 var minlevel = 100;
 // Guild ranks are different for each guild - please input the correct values here.
@@ -74,4 +74,4 @@ var page3_string = "Nyheter";
 var newstitle_string = "Nyheter";
 
 // Modify this variable if you change any of the files. Its for deleting the localStorage data.
-var version = 8;
+var version = 3;

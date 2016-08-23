@@ -1,8 +1,10 @@
 
 // Function to calculate time since input data.
-function timeSince(date) {
-    var returndate = (new Date().getTime() / 1000).toString().split('.').shift() - date.toString().split('.').shift();
+function timeSince(dato) {
+    console.log((new Date().getTime() / 1000).toString().split('.').shift() - dato.toString().split('.').shift());
+    var returndate = (new Date().getTime() / 1000).toString().split('.').shift() - dato.toString().split('.').shift();
     return returndate;
+
 }
 
 // Prototype to create hashCode out of a string.
@@ -27,10 +29,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
     battleNetConfigProvider.setDefaultRegion(region);
     $sceDelegateProvider.resourceUrlWhitelist(['**']);
 
-    $locationProvider.html5Mode({
-        enabled: false,
-        rewriteLinks: false
-    });
+
     // You can comment this out for debug
     //$compileProvider.debugInfoEnabled(false);
 
@@ -60,18 +59,19 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     function (answer) {
                         $scope.char = angular.fromJson(answer.data);
                         $scope.$storage[$stateParams.char] = angular.fromJson(answer.data);
-                        $scope.$storage[$stateParams.char]['time'] = new Date().getTime() / 1000;
+
+                        if (!$scope.$storage.time) {
+                            console.log("time set");
+                            $scope.$storage.time = new Date().getTime() / 1000;
+                        }
                     },
                     // Fail
                     function (reason) {
-                        $scope.$storage[$stateParams.char] = angular.fromJson(reason.status);
+                        $rootScope.updateData($stateParams.char);
                     }
                 ).finally(function () {
                     // If char has value 404, reload it.
-                    if ($scope.$storage[$stateParams.char] == '404') {
-                        $rootScope.updateData($stateParams.char)
-                        // If timestamp is old, reload it.
-                    } else if (timeSince($scope.$storage[$stateParams.char]['time']) >= 3600) {
+                    if (timeSince($scope.$storage.time) >= 3600) {
                         $rootScope.updateData($stateParams.char)
                     }
 
@@ -123,17 +123,17 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         function (answer) {
                             $scope.gnews = angular.fromJson(answer.data);
                             $scope.$storage['gnews'] = angular.fromJson(answer.data);
-                            $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
+                            if (!$scope.$storage.time) {
+                                console.log("time set");
+                                $scope.$storage.time = new Date().getTime() / 1000;
+                            }
                         },
                         // Fail
                         function (reason) {
-                            $scope.$storage['gnews'] = angular.fromJson(reason.status);
+                            $rootScope.updateData('gnews');
                         }
                     ).finally(function () {
-
-                        if ($scope.$storage['gnews'] == '404') {
-                            $rootScope.updateData('gnews')
-                        } else if (timeSince($scope.$storage['gnews']['time']) >= 3600) {
+                        if (timeSince($scope.$storage.time) >= 3600) {
                             $rootScope.updateData('gnews')
                         }
 
@@ -176,7 +176,6 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
 axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'dataJson', 'wowApi', '$stateParams', '$localStorage', 'GetData', function ($scope, $http, $timeout, $rootScope, $state, dataJson, wowApi, $stateParams, $localStorage, GetData) {
     $rootScope.sok = "";
     $scope.$storage = $localStorage;
-
     // Set application version, delete cache if version changes.
     if (!$scope.$storage['version']) {
         $scope.$storage['version'] = "";
@@ -299,17 +298,17 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
         function (answer) {
             $scope.guild = angular.fromJson(answer.data);
             $scope.$storage['guild'] = angular.fromJson(answer.data);
-            $scope.$storage['guild']['time'] = new Date().getTime() / 1000;
+            if (!$scope.$storage.time) {
+                console.log("time set");
+                $scope.$storage.time = new Date().getTime() / 1000;
+            }
         },
         // Fail
         function (reason) {
-            $scope.$storage['guild'] = angular.fromJson(reason.status);
+            $rootScope.updateData('guild');
         }
     ).finally(function () {
-
-        if ($scope.$storage['guild'] == '404') {
-            $rootScope.updateData('guild')
-        } else if (timeSince($scope.$storage['guild']['time']) >= 3600) {
+        if (timeSince($scope.$storage.time) >= 3600) {
             $rootScope.updateData('guild')
         }
         $timeout(function () {
@@ -325,11 +324,14 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
             wowApi.guild.news({ name: $scope.guildName, realm: $scope.serverName }).then(function (response) {
                 $scope['gnews'] = angular.fromJson(response.data);
                 $scope.$storage['gnews'] = angular.fromJson(response.data);
-                $scope.$storage['gnews']['time'] = new Date().getTime() / 1000;
+
+                $scope.$storage.time = new Date().getTime() / 1000;
+
 
             }).finally(function () {
                 if ($scope.$storage['gnews'].code != '504') {
                     dataJson.saveData($scope.$storage['gnews'], "gnews.json");
+                    $scope.$storage['gnews'] = [];
                 }
                 if ($scope.char.code == '504') {
                     location.reload();
@@ -349,11 +351,12 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
             wowApi.guild.profile({ name: $scope.guildName, realm: $scope.serverName, fields: ['members', 'profile'] }).then(function (response) {
                 $scope['guild'] = angular.fromJson(response.data);
                 $scope.$storage['guild'] = angular.fromJson(response.data);
-                $scope.$storage['guild']['time'] = new Date().getTime() / 1000;
+                $scope.$storage.time = new Date().getTime() / 1000;
 
             }).finally(function () {
                 if ($scope.$storage[inputString].code != '504') {
                     dataJson.saveData($scope.$storage['guild'], "guild.json");
+                    $scope.$storage['guild'] = [];
                 }
                 if ($scope.char.code == '504') {
                     location.reload();
@@ -372,7 +375,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
             wowApi.character.profile({ name: inputString, realm: $scope.serverName, fields: ['items', 'feed', 'titles', 'stats', 'talents'] }).then(function (response) {
                 $scope.char = angular.fromJson(response.data);
                 $scope.$storage[inputString] = angular.fromJson(response.data);
-                $scope.$storage[inputString]['time'] = new Date().getTime() / 1000;
+                $scope.$storage.time = new Date().getTime() / 1000;
 
             }).finally(function () {
                 if ($scope.$storage[inputString].code != '504') {
@@ -384,6 +387,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                     });
 
                     dataJson.saveData($scope.$storage[inputString], inputString.hashCode() + ".json");
+
                 }
                 if ($scope.char.code == '504') {
                     location.reload();
@@ -423,7 +427,7 @@ angular.module('getData', [])
             GetData = {
                 // Promise funksjon for å hente guild.
                 getGuild: function () {
-                    var promise = $http.get('json/guild.json', { cache: true }),
+                    var promise = $http.get('json/guild.json'),
                         deferObject = deferObject || $q.defer();
 
                     promise.then(
@@ -441,7 +445,7 @@ angular.module('getData', [])
                     return deferObject.promise;
                 },
                 getNews: function () {
-                    var promise = $http.get('json/gnews.json', { cache: true }),
+                    var promise = $http.get('json/gnews.json'),
                         deferObject = deferObject || $q.defer();
 
                     promise.then(
@@ -456,7 +460,7 @@ angular.module('getData', [])
                 },
                 // $stateParams.char.hashCode()
                 getChar: function (charhash) {
-                    var promise = $http.get('json/' + charhash + '.json', { cache: true }),
+                    var promise = $http.get('json/' + charhash + '.json'),
                         deferObject = deferObject || $q.defer();
 
                     promise.then(
