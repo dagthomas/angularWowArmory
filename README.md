@@ -91,7 +91,7 @@ This is my first ever GIT, and first try with gulp/bower/npm - hopefully I got i
 
 ## Shoutouts
 
-* **Eric Taylor** - *Mythic skull, loading* - [elementsaside](www.elementsaside.com)
+* **Eric Taylor** - *Mythic skull, loading* - [elementsaside](http://elementsaside.com/)
 
 ## License
 
