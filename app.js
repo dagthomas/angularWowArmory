@@ -22,13 +22,13 @@ String.prototype.hashCode = function () {
 
 var axeApp = angular.module("axeApp", ["ngSanitize", "ngStorage", "ngBattleNet", "ui.router", "angular.filter", "ngMaterial", "md.data.table", "getData", "ngSanitize", "angular-loading-bar"]);
 
-axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider', '$mdThemingProvider', '$compileProvider', '$sceDelegateProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, battleNetConfigProvider, $mdThemingProvider, $compileProvider, $sceDelegateProvider, $locationProvider) {
+axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider', '$mdThemingProvider', '$compileProvider', '$sceDelegateProvider', '$locationProvider', 'cfpLoadingBarProvider', function ($stateProvider, $urlRouterProvider, battleNetConfigProvider, $mdThemingProvider, $compileProvider, $sceDelegateProvider, $locationProvider, cfpLoadingBarProvider) {
 
     // Sets the API key and region from the settings.js file
     battleNetConfigProvider.setApiKey(apikey);
     battleNetConfigProvider.setDefaultRegion(region);
     $sceDelegateProvider.resourceUrlWhitelist(['**']);
-
+    cfpLoadingBarProvider.includeSpinner = false;
 
     // You can comment this out for debug
     //$compileProvider.debugInfoEnabled(false);
@@ -42,7 +42,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
             url: "/guild/:char",
             templateUrl: "partials/char.html",
             controller: ['wowApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', '$rootScope', function (wowApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData, $rootScope) {
-
+                $rootScope.finishedLoading = false;
                 /*wowApi.achievement({ id: 2144 }).then(function (response) {
                     $scope.test = angular.fromJson(response.data);
 
@@ -73,18 +73,19 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                     // If char has value 404, reload it.
                     if (timeSince($scope.$storage.time) >= 3600) {
                         $rootScope.updateData($stateParams.char)
+                    } else {
+
+                        $timeout(function () {
+                            $rootScope.loaderIcon = false;
+                        }, 250);
+                        $timeout(function () {
+                            $WowheadPower.refreshLinks();
+                        }, 1000);
+                        $timeout(function () {
+                            $rootScope.finishedLoading = true;
+                            $rootScope.loadItems = true;
+                        }, 1250);
                     }
-
-                    $timeout(function () {
-                        $rootScope.loaderIcon = false;
-                    }, 250);
-                    $timeout(function () {
-                        $WowheadPower.refreshLinks();
-                    }, 1000);
-                    $timeout(function () {
-                        $rootScope.loadItems = true;
-                    }, 1250);
-
                 });
             }]
         })
@@ -104,6 +105,7 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
             url: "/guildnews",
             templateUrl: "partials/gnews.html",
             controller: ['wowApi', '$scope', '$stateParams', '$timeout', '$localStorage', 'dataJson', '$http', 'GetData', '$rootScope', function (wowApi, $scope, $stateParams, $timeout, $localStorage, dataJson, $http, GetData, $rootScope) {
+                $rootScope.finishedLoading = false;
                 $rootScope.page = 3;
                 $scope.newsType = $stateParams.type;
                 $scope.raidTypes = [{ "name": "Ingen filter" }, { "type": "dungeon-normal", "name": "N.Dungeon" }, { "type": "dungeon-heroic", "name": "H.Dungeon" }, { "type": "dungeon-mythic", "name": "M.Dungeon" }, { "type": "raid-normal", "name": "N.Raid" }, { "type": "raid-heroic", "name": "H.Raid" }, { "type": "raid-mythic", "name": "M.Raid" }];
@@ -130,22 +132,27 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
                         },
                         // Fail
                         function (reason) {
+
                             $rootScope.updateData('gnews');
+
                         }
                     ).finally(function () {
                         if (timeSince($scope.$storage.time) >= 3600) {
                             $rootScope.updateData('gnews')
-                        }
+                        } else {
 
-                        $timeout(function () {
-                            $rootScope.loaderIcon = false;
-                        }, 250);
-                        $timeout(function () {
-                            $WowheadPower.refreshLinks();
-                        }, 1000);
-                        $timeout(function () {
-                            $rootScope.loadItems = true;
-                        }, 1250);
+
+                            $timeout(function () {
+                                $rootScope.loaderIcon = false;
+                            }, 250);
+                            $timeout(function () {
+                                $WowheadPower.refreshLinks();
+                            }, 1000);
+                            $timeout(function () {
+                                $rootScope.finishedLoading = true;
+                                $rootScope.loadItems = true;
+                            }, 1250);
+                        }
                     });
 
                 }
@@ -176,6 +183,8 @@ axeApp.config(['$stateProvider', '$urlRouterProvider', 'battleNetConfigProvider'
 axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$state', 'dataJson', 'wowApi', '$stateParams', '$localStorage', 'GetData', function ($scope, $http, $timeout, $rootScope, $state, dataJson, wowApi, $stateParams, $localStorage, GetData) {
     $rootScope.sok = "";
     $scope.$storage = $localStorage;
+    $rootScope.finishedLoading = false;
+
     // Set application version, delete cache if version changes.
     if (!$scope.$storage['version']) {
         $scope.$storage['version'] = "";
@@ -310,16 +319,20 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
     ).finally(function () {
         if (timeSince($scope.$storage.time) >= 3600) {
             $rootScope.updateData('guild')
+        } else {
+
+            $timeout(function () {
+                $rootScope.loaderIcon = false;
+            }, 250);
+            $timeout(function () {
+                $rootScope.finishedLoading = true;
+                $rootScope.loadItems = true;
+            }, 1250);
         }
-        $timeout(function () {
-            $rootScope.loaderIcon = false;
-        }, 250);
-        $timeout(function () {
-            $rootScope.loadItems = true;
-        }, 1250);
     });
 
     $rootScope.updateData = function (inputString) {
+        $rootScope.finishedLoading = false;
         if (inputString == 'gnews') {
             wowApi.guild.news({ name: $scope.guildName, realm: $scope.serverName }).then(function (response) {
                 $scope['gnews'] = angular.fromJson(response.data);
@@ -329,11 +342,11 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
 
 
             }).finally(function () {
-                if ($scope.$storage['gnews'].code != '504') {
+                if (!$scope.$storage['gnews'].code) {
                     dataJson.saveData($scope.$storage['gnews'], "gnews.json");
                     $scope.$storage['gnews'] = [];
                 }
-                if ($scope.char.code == '504') {
+                if ($scope.char.code) {
                     location.reload();
                 }
                 $timeout(function () {
@@ -343,6 +356,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                     $WowheadPower.refreshLinks();
                 }, 1000);
                 $timeout(function () {
+                    $rootScope.finishedLoading = true;
                     $rootScope.loadItems = true;
                 }, 1250);
             });
@@ -354,11 +368,11 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                 $scope.$storage.time = new Date().getTime() / 1000;
 
             }).finally(function () {
-                if ($scope.$storage[inputString].code != '504') {
+                if (!$scope.$storage[inputString].code) {
                     dataJson.saveData($scope.$storage['guild'], "guild.json");
                     $scope.$storage['guild'] = [];
                 }
-                if ($scope.char.code == '504') {
+                if ($scope.char.code) {
                     location.reload();
                 }
                 $timeout(function () {
@@ -368,6 +382,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                     $WowheadPower.refreshLinks();
                 }, 1000);
                 $timeout(function () {
+                    $rootScope.finishedLoading = true;
                     $rootScope.loadItems = true;
                 }, 1250);
             });
@@ -378,7 +393,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                 $scope.$storage.time = new Date().getTime() / 1000;
 
             }).finally(function () {
-                if ($scope.$storage[inputString].code != '504') {
+                if (!$scope.$storage[inputString].code) {
                     angular.forEach($scope.$storage[inputString]['titles'], function (value, key) {
                         if (value.selected) {
                             $scope.$storage[inputString]['name'] = $scope.$storage[inputString]['titles'][key].name.replace("%s", $scope.$storage[inputString]['name']);
@@ -389,7 +404,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                     dataJson.saveData($scope.$storage[inputString], inputString.hashCode() + ".json");
 
                 }
-                if ($scope.char.code == '504') {
+                if ($scope.char.code) {
                     location.reload();
                 }
                 $timeout(function () {
@@ -399,6 +414,7 @@ axeApp.controller('MainCtrl', ['$scope', '$http', '$timeout', '$rootScope', '$st
                     $WowheadPower.refreshLinks();
                 }, 1000);
                 $timeout(function () {
+                    $rootScope.finishedLoading = true;
                     $rootScope.loadItems = true;
                 }, 1250);
             });
