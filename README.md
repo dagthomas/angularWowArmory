@@ -88,7 +88,7 @@ It will create a /dist/ folder with the uploadable content.
 This is my first ever GIT, and first try with gulp/bower/npm - hopefully I got it right :)
 
 * **Dag Thomas Olsen** - *Initial work* - [dagthomas](https://github.com/dagthomas)
-* 
+
 ## Shoutouts
 
 * **Eric Taylor** - *Mythic skull, loading* - [elementsaside](www.elementsaside.com)
